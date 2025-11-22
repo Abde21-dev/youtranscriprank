@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Transcription YouTube</title>
+
+   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+    <h1>Transcription de vidéo YouTube</h1>
+
+    <form method="POST">
+        <label for="url">URL de la vidéo YouTube :</label><br>
+        <input type="text" id="url" name="url" placeholder="https://www.youtube.com/watch?v=..." value="{{ url or '' }}" required>
+        <br>
+        <button type="submit">Récupérer la transcription</button>
+    </form>
+
+    {% if erreur %}
+      <div class="error">{{ erreur }}</div>
+    {% endif %}
+
+    {% if transcript %}
+      <div class="info">
+        Transcription récupérée pour la vidéo ID : <strong>{{ video_id }}</strong>
+      </div>
+      <textarea readonly>{{ transcript }}</textarea>
+    {% endif %}
+</body>
+</html>
