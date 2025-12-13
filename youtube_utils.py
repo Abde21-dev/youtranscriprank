@@ -39,10 +39,7 @@ def extraire_video_id(url: str) -> str:
 
 
 def recuperer_transcription(video_id: str, langues=None) -> str:
-    """
-    Récupère la transcription sous forme de texte brut
-    pour la version 1.2.3 de youtube-transcript-api.
-    """
+    
     if langues is None:
         langues = ["fr", "en"]
 

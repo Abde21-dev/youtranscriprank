@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-container">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px;">
+        <a href="{{ url_for('mes_articles_list') }}" class="btn-secondary">← Retour</a>
+        <button type="button" class="btn-secondary" onclick="copierArticleHTMLDepuisView()">
+            Copier l'article
+        </button>
+    </div>
+    <h1>{{ article.title or "Article" }}</h1>
+    {% if article.keyword %}<p><strong>Mot-clé :</strong> {{ article.keyword }}</p>{% endif %}
+    {% if article.seo_title %}<p><strong>SEO title :</strong> {{ article.seo_title }}</p>{% endif %}
+    {% if article.meta_description %}<p><strong>Meta :</strong> {{ article.meta_description }}</p>{% endif %}
+    {% if article.image_url %}
+      <div class="article-image"><img src="{{ article.image_url }}" alt="Illustration" style="max-width:100%"></div>
+    {% endif %}
+
+    <hr>
+
+    <div id="article-html-view" class="article-content">
+    {{ html_content|safe }}
+    </div>
+
+</div>
+
+<script>
+function copierArticleHTMLDepuisView() {
+    const articleEl = document.getElementById("article-html-view");
+    if (!articleEl) {
+        alert("Erreur : article introuvable.");
+        return;
+    }
+
+    const temp = document.createElement("textarea");
+    temp.value = articleEl.innerHTML.trim();
+    document.body.appendChild(temp);
+
+    temp.select();
+    temp.setSelectionRange(0, 999999);
+
+    try {
+        document.execCommand("copy");
+        alert("Article copié dans le presse-papier ✔️");
+    } catch (err) {
+        alert("Impossible de copier automatiquement. Copiez manuellement.");
+    }
+
+    document.body.removeChild(temp);
+}
+</script>
+{% endblock %}

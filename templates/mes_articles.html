@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-container">
+    <h1 class="articles-title">Mes articles</h1>
+    <p class="articles-subtitle">
+        Retrouvez ici tous les articles que vous avez générés.
+    </p>
+
+    {% if articles %}
+        <div class="articles-list">
+            {% for a in articles %}
+                <div class="article-row">
+                    <div class="article-info">
+                        <div class="article-meta">
+                            Article généré le
+                            <span class="article-date">{{ a.created_at }}</span>
+                        </div>
+                        <h3 class="article-title">
+                            {{ a.title or "Sans titre" }}
+                        </h3>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-secondary"
+                           href="{{ url_for('voir_article', article_id=a.id) }}">
+                            Voir l'article
+                        </a>
+                        
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="articles-empty">
+            Aucun article pour l'instant. Générez-en un depuis la page Transcription.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+

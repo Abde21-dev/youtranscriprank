@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>{{ title or "AutoTube Writer" }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="app-body">
+    <div class="gradient-bg"></div>
+
+    <div class="app-layout
+                {% if current_user %}app-layout--with-sidebar{% else %}app-layout--public{% endif %}">
+
+        {% if current_user %}
+            
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="logo-circle">ATW</div>
+                    <div class="sidebar-title">
+                        <span class="brand">AutoTube Writer</span>
+                        <span class="brand-sub">Rédacteur SEO</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-credits">
+                    <div class="credits-title">Crédits</div>
+                    <div class="credits-value">{{ current_user.credits or 0 }}</div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <a href="{{ url_for('transcription') }}"
+                       class="nav-link {% if active_page == 'transcription' %}active{% endif %}">
+                        Transcription
+                    </a>
+                    <a href="{{ url_for('mes_articles_list') }}"
+                       class="nav-link {% if active_page == 'mes_articles' %}active{% endif %}">
+                        Mes articles
+                    </a>
+                    <a href="{{ url_for('mise_a_niveau') }}"
+                       class="nav-link {% if active_page == 'mise_a_niveau' %}active{% endif %}">
+                        Mise à niveau
+                    </a>
+                    <a href="{{ url_for('mon_compte') }}"
+                       class="nav-link {% if active_page == 'mon_compte' %}active{% endif %}">
+                        Mon compte
+                    </a>
+
+                    <!-- <hr class="sidebar-separator"> 
+
+                    <span class="user-email">Connecté : {{ current_user.email }}</span> -->
+                    <a href="{{ url_for('logout') }}" class="nav-link logout-link">
+                        Se déconnecter
+                    </a>
+                </nav>
+            </aside>
+
+        {% else %}
+            
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="logo-circle">ATW</div>
+                    <span class="brand">AutoTube Writer</span>
+                </div>
+                <div class="topbar-right">
+                    <a href="{{ url_for('login') }}"
+                       class="topbar-link {% if active_page == 'login' %}active{% endif %}">
+                        Connexion
+                    </a>
+                    <a href="{{ url_for('signup') }}"
+                       class="topbar-link topbar-link-primary {% if active_page == 'signup' %}active{% endif %}">
+                        Inscription
+                    </a>
+                </div>
+            </header>
+        {% endif %}
+
+        
+        <main class="main-content {% if not current_user %}main-content--public{% endif %}">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <footer class="footer">
+        <span>© 2025 AutoTube Writer.</span>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

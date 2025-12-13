@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-container">
+    <div class="card auth-card">
+
+        <h1 class="app-title">Paiement réussi </h1>
+
+        {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+        {% else %}
+            <p class="app-subtitle">
+                Merci pour votre achat ! Votre formule <strong>{{ plan }}</strong> est maintenant active.
+            </p>
+
+            {% if added %}
+            <p>
+                Vous venez de recevoir <strong>{{ added }}</strong> crédits.<br>
+                Solde actuel : <strong>{{ new_credits }}</strong> crédits.
+            </p>
+            {% endif %}
+
+            <a class="btn-primary" href="{{ url_for('transcription') }}">Retour à l'application</a>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

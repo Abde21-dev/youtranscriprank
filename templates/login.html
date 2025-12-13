@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-container">
+    <div class="card auth-card">
+        <div class="card-left auth-left">
+            <h1 class="app-title">Connexion</h1>
+            <p class="app-subtitle">
+                Connectez-vous pour retrouver vos articles générés et continuer à booster vos contenus.
+            </p>
+
+            <ul class="feature-list">
+                <li>📚 Retrouver vos articles optimisés</li>
+                <li>🎧 Transformer vos vidéos en contenus de blog</li>
+                <li>🚀 Gagner du temps sur la rédaction</li>
+            </ul>
+        </div>
+
+        <div class="card-right auth-right">
+            <h2 class="form-title">Se connecter</h2>
+            <p class="form-subtitle">
+                Saisissez votre e-mail et votre mot de passe.
+            </p>
+
+            {% if erreur %}
+              <div class="alert alert-error">
+                  {{ erreur }}
+              </div>
+            {% endif %}
+
+            <form method="POST" class="form">
+                <label for="email" class="form-label">Adresse e-mail</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="input-text"
+                    placeholder="vous@exemple.com"
+                    value="{{ email_value or '' }}"
+                    required
+                >
+
+                <label for="password" class="form-label" style="margin-top: 12px;">
+                    Mot de passe
+                </label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="input-text"
+                    placeholder="Votre mot de passe"
+                    required
+                >
+
+                <button type="submit" class="btn-primary" style="margin-top: 16px;">
+                    Se connecter
+                </button>
+            </form>
+
+            <p class="helper-text" style="margin-top: 12px;">
+                Pas encore de compte ?
+                <a href="{{ url_for('signup') }}" class="link-muted">Créer un compte</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

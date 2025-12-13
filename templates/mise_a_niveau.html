@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-container">
+    <div class="card auth-card">
+        <div class="card-left auth-left">
+            <h1 class="app-title">Mise à niveau</h1>
+            <p class="app-subtitle">
+Créer des articles de blog performants ne devrait pas être compliqué.</p>
+<p class="app-subtitle">Avec AutoTube Writer, vous transformez en quelques secondes les meilleures vidéos YouTube du moment en articles complets, optimisés SEO, prêts à être publiés — sans aucune rédaction manuelle.</p>
+
+<p class="app-subtitle">Chaque article généré inclut automatiquement :</p>
+
+<p class="app-subtitle">• Un plan clair et pertinent</p>
+<p class="app-subtitle">• Une rédaction fluide basée sur des contenus déjà plébiscités</p>
+<p class="app-subtitle">• Un mot-clé ciblé pour assurer votre positionnement</p>
+<p class="app-subtitle">• Un Title puissant et optimisé SEO</p>
+<p class="app-subtitle">• Une meta-description professionnelle</p>
+<p class="app-subtitle">• Une image unique pour illustrer votre article</p>
+<p class="app-subtitle">
+En un clic, vous obtenez un article finalisé que vous pouvez copier-coller dans votre blog, votre CMS, vos réseaux ou vos newsletters.
+            </p>
+<p><strong>Passez à Medium ou Premium</strong></p>
+
+<p class="app-subtitle">Plus de crédits = plus d’articles = plus de trafic.</p>
+
+<p class="app-subtitle">Créez du contenu pro, gagnez du temps et faites croître votre audience — automatiquement.</p>
+
+<p class="app-subtitle">Choisissez votre formule et débloquez tout le potentiel de AutoTube Writer.</p>
+            <p><strong>Formule actuelle :</strong> {{ status or "free" }}</p>
+        </div> 
+
+        <div class="offers-container">
+
+    <div class="offer-card {% if status == 'medium' %}selected-plan{% endif %}">
+        <h3>Medium</h3>
+        <p class="price">9,97 €</p>
+        <p class="credits">20 crédits</p>
+        <p class="desc">Parfait pour une utilisation régulière.</p>
+
+        <form method="POST">
+            <input type="hidden" name="status" value="medium">
+            <button class="stripe-buy" data-plan="medium">Choisir Medium</button>
+        </form>
+    </div>
+
+    <div class="offer-card {% if status == 'premium' %}selected-plan{% endif %}">
+        <h3>Premium</h3>
+        <p class="price">19,97 €</p>
+        <p class="credits">50 crédits</p>
+        <p class="desc">Pour une production massive.</p>
+
+        <form method="POST">
+            <input type="hidden" name="status" value="premium">
+            <button class="stripe-buy" data-plan="premium">Choisir Premium</button>
+        </form>
+    </div>
+
+</div>
+</div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('.stripe-buy').forEach(btn => {
+  btn.addEventListener('click', async function(e) {
+    const plan = btn.dataset.plan;
+    btn.disabled = true;
+    btn.textContent = "Redirection...";
+
+    try {
+      const res = await fetch(`/create-checkout-session/${plan}`, { method: 'POST' });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Erreur Stripe: " + (data.error || "Erreur inconnue"));
+        btn.disabled = false;
+        btn.textContent = "Acheter";
+      }
+    } catch (err) {
+      alert("Erreur réseau, réessaie.");
+      btn.disabled = false;
+      btn.textContent = "Acheter";
+    }
+  });
+});
+</script>
+{% endblock %}
+

@@ -3,29 +3,291 @@
 <head>
     <meta charset="utf-8">
     <title>Transcription YouTube</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="app-body">
+    <div class="gradient-bg"></div>
 
-   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <div class="page-container">
+        <div class="card">
+            <div class="card-left">
+                <div class="logo-circle">ATW</div>
+                <h1 class="app-title">AutoTube Writer</h1>
+                <p class="app-subtitle">
+                    Collez une URL YouTube et obtenez instantanément la transcription de la vidéo.
+                </p>
 
+                <ul class="feature-list">
+                    <li>🎧 Support des vidéos longues et courtes</li>
+                    <li>🌍 Transcriptions multilingues (FR / EN selon dispo)</li>
+                    <li>📄 Copiez ou sauvegardez le texte facilement</li>
+                </ul>
+
+                {% if transcript %}
+                  <div class="badge badge-success">
+                    ✅ Transcription prête pour la vidéo : <span>{{ video_id }}</span>
+                  </div>
+                {% elif erreur %}
+                  <div class="badge badge-warning">
+                    ⚠️ Une erreur est survenue, vérifiez l’URL et réessayez.
+                  </div>
+                {% else %}
+                  <div class="badge badge-neutral">
+                    ✨ Commencez par coller une URL de vidéo YouTube ci-contre.
+                  </div>
+                {% endif %}
+            </div>
+
+            <div class="card-right">
+                <h2 class="form-title">Transcrire une vidéo</h2>
+                <p class="form-subtitle">
+                    Collez simplement l’URL complète de la vidéo YouTube ci-dessous.
+                </p>
+
+                <form method="POST" class="form">
+                    <label for="url" class="form-label">URL de la vidéo YouTube</label>
+                    <div class="input-group">
+                        <span class="input-prefix">https://</span>
+                        <input
+                            type="text"
+                            id="url"
+                            name="url"
+                            class="input-text"
+                            placeholder="www.youtube.com/watch?v=..."
+                            value="{{ url or '' }}"
+                            required
+                        >
+                    </div>
+
+                    {% if erreur %}
+                      <div class="alert alert-error">
+                          {{ erreur }}
+                      </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn-primary">
+                        Récupérer la transcription
+                    </button>
+
+                    <p class="helper-text">
+                        En collant un lien, vous acceptez que le texte affiché provienne des
+                        sous-titres disponibles sur YouTube (qu’ils soient automatiques ou non).
+                    </p>
+                </form>
+
+                {% if transcript %}
+                  <div class="transcript-container">
+                      <div class="transcript-header">
+                          <h3>Transcription</h3>
+                          <button type="button" class="btn-secondary" onclick="copierTranscription()">
+                              Copier le texte
+                          </button>
+                      </div>
+                      <textarea id="transcript-text" readonly>{{ transcript }}</textarea>
+
+                        <!-- Nouveau : formulaire pour générer un article de blog -->
+                    <form method="POST" action="{{ url_for('blogify') }}" class="form" style="margin-top: 14px;">
+                    <label for="titre_souhaite" class="form-label">Titre souhaité pour l'article (optionnel)</label>
+                        <input
+                            type="text"
+                            id="titre_souhaite"
+                            name="titre_souhaite"
+                            class="input-text"
+                            placeholder="Ex : Comment la transcription YouTube peut booster votre contenu ?"
+                        >
+
+                    <!-- On renvoie le texte source dans un champ caché -->
+                    <textarea name="source_text" hidden>{{ transcript }}</textarea>
+
+                    <button type="submit" class="btn-primary">
+                    Générer un article de blog optimisé
+                    </button>
+                    </form>
+                  </div>
+                {% endif %}
+                
+            </div>
+
+             {% if article_html %}
+        <div class="article-card full-width-section">
+            <div class="article-card-inner">
+                <div class="article-card-header">
+                <div>
+                  <h2>Article de blog généré</h2>
+                  <p>Contenu HTML prêt à être copié-collé dans ton CMS.</p>
+              </div>
+
+              <div class="article-header-actions">
+                  <button type="button" class="btn-secondary" onclick="copierArticleHTML()">
+                      Copier l’article
+                  </button>
+                  <button type="button" class="btn-secondary" onclick="ouvrirArticleNouvelOnglet()">
+                      Voir dans un nouvel onglet
+                  </button>
+              </div>
+          </div>
+
+          <!-- Bloc SEO -->
+          <div class="seo-meta">
+              {% if seo_keyword %}
+                <div class="seo-item">
+                    <span class="seo-label">Mot-clé principal :</span>
+                    <span class="seo-value">{{ seo_keyword }}</span>
+                </div>
+              {% endif %}
+
+              {% if seo_title %}
+                <div class="seo-item">
+                    <span class="seo-label">Title SEO :</span>
+                    <span class="seo-value">{{ seo_title }}</span>
+                </div>
+              {% endif %}
+
+              {% if meta_description %}
+                <div class="seo-item">
+                    <span class="seo-label">Meta description :</span>
+                    <span class="seo-value">{{ meta_description }}</span>
+                </div>
+              {% endif %}
+          </div>
+
+          {% if image_url %}
+            <div class="article-image-wrapper">
+                <img src="{{ image_url }}" alt="Image générée pour illustrer l’article"
+                class="article-image">
+
+                <div class="article-image-actions">
+                    <a href="{{ image_url }}"
+                    download="illustration-article.png"
+                    class="btn-secondary btn-download-image">
+                    Télécharger l’image
+                    </a>
+                </div>
+            </div>
+          {% endif %}
+            
+
+          <!-- Contenu de l'article -->
+          <div id="article-html" class="article-content">
+              {{ article_html|safe }} <!-- Pour que Flask rende le HTML, pas du texte brut -->
+          </div>
+      </div>
+  </div>
+{% endif %}    
+
+
+        </div>
+
+       
+
+
+
+        <footer class="footer">
+            <span>© {{ 2025 }} AutoTube Writer.</span>
+        </footer>
+    </div>
+
+    <script>
+        function copierTranscription() {
+            const textarea = document.getElementById('transcript-text');
+            if (!textarea) return;
+
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // pour mobile
+
+            try {
+                document.execCommand('copy');
+                alert('Transcription copiée dans le presse-papier ✔️');
+            } catch (e) {
+                alert('Impossible de copier automatiquement. Sélectionnez le texte manuellement.');
+            }
+        }
+
+        function copierArticleHTML() {
+            const articleEl = document.getElementById("article-html");
+            if (!articleEl) {
+            alert("Erreur : article introuvable.");
+            return;
+        }
+
+        // Création d’un élément temporaire pour copier l’HTML
+            const temp = document.createElement("textarea");
+            temp.value = articleEl.innerHTML.trim();
+            document.body.appendChild(temp);
+
+            temp.select();
+            temp.setSelectionRange(0, 999999); // Compatibilité mobile
+
+        try {
+            document.execCommand("copy");
+            alert("Article copié dans le presse-papier ✔️");
+        } catch (err) {
+            alert("Impossible de copier automatiquement. Copiez manuellement.");
+        }
+
+        document.body.removeChild(temp);
+        }
+
+
+    function ouvrirArticleNouvelOnglet() {
+    const articleEl = document.getElementById("article-html");
+    if (!articleEl) {
+        alert("Erreur : article introuvable.");
+        return;
+    }
+
+    const htmlContent = articleEl.innerHTML;
+
+    const win = window.open("", "_blank");
+    if (!win) {
+        alert("Le navigateur a bloqué l’ouverture du nouvel onglet.");
+        return;
+    }
+
+    win.document.write(`<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Aperçu de l’article</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 0 16px 40px;
+      line-height: 1.7;
+    }
+    h1, h2, h3 {
+      margin-top: 1.4em;
+      margin-bottom: 0.4em;
+    }
+    p {
+      margin: 0.4em 0 0.8em;
+    }
+    ul, ol {
+      padding-left: 1.4rem;
+      margin: 0.4em 0 0.8em;
+    }
+    li {
+      margin-bottom: 0.2em;
+    }
+    blockquote {
+      margin: 0.8em 0;
+      padding-left: 1em;
+      border-left: 3px solid #e5e7eb;
+      font-style: italic;
+      color: #6b7280;
+    }
+  </style>
 </head>
 <body>
-    <h1>Transcription de vidéo YouTube</h1>
-
-    <form method="POST">
-        <label for="url">URL de la vidéo YouTube :</label><br>
-        <input type="text" id="url" name="url" placeholder="https://www.youtube.com/watch?v=..." value="{{ url or '' }}" required>
-        <br>
-        <button type="submit">Récupérer la transcription</button>
-    </form>
-
-    {% if erreur %}
-      <div class="error">{{ erreur }}</div>
-    {% endif %}
-
-    {% if transcript %}
-      <div class="info">
-        Transcription récupérée pour la vidéo ID : <strong>{{ video_id }}</strong>
-      </div>
-      <textarea readonly>{{ transcript }}</textarea>
-    {% endif %}
+${htmlContent}
+</body>
+</html>`);
+    win.document.close();
+}
+</script>
 </body>
 </html>

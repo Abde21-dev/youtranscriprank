@@ -1,0 +1,88 @@
+2025-12-04 18:51:47,099 ERROR Échec mise à jour Airtable après paiement. session_id=cs_test_a1PaSNv0Bxc2ALDzIvEwUsiRsIo5xORibvNarGsfAifKMKJINBig6Hi0As user_id=recnYMaBPjWB9JQvE plan=medium error=('422 Client Error: Unprocessable Entity for url: https://api.airtable.com/v0/appLsHuXapDRwA4sn/users/recnYMaBPjWB9JQvE', '{\'type\': \'UNKNOWN_FIELD_NAME\', \'message\': \'Unknown field name: "stripeCustomerId"\'}')
+Traceback (most recent call last):
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\app.py", line 755, in upgrade_success
+    table.update(user_id, updated_fields)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\table.py", line 450, in update
+    updated = self.api.request(
+        method=method,
+    ...<5 lines>...
+        },
+    )
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\api.py", line 295, in request
+    return self._process_response(response)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\api.py", line 337, in _process_response
+    raise exc
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\api.py", line 327, in _process_response
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\requests\models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: ('422 Client Error: Unprocessable Entity for url: https://api.airtable.com/v0/appLsHuXapDRwA4sn/users/recnYMaBPjWB9JQvE', '{\'type\': \'UNKNOWN_FIELD_NAME\', \'message\': \'Unknown field name: "stripeCustomerId"\'}')
+2025-12-04 19:00:13,543 ERROR Échec mise à jour Airtable après paiement. session_id=cs_test_a1NaALppgopRui9HWcvQ4MCqjreUMmHqIAkRYCh8D9lQLxQGEKHtS5DoD6 user_id=recnYMaBPjWB9JQvE plan=medium error=('422 Client Error: Unprocessable Entity for url: https://api.airtable.com/v0/appLsHuXapDRwA4sn/users/recnYMaBPjWB9JQvE', '{\'type\': \'UNKNOWN_FIELD_NAME\', \'message\': \'Unknown field name: "stripeCustomerId"\'}')
+Traceback (most recent call last):
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\app.py", line 755, in upgrade_success
+    table.update(user_id, updated_fields)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\table.py", line 450, in update
+    updated = self.api.request(
+        method=method,
+    ...<5 lines>...
+        },
+    )
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\api.py", line 295, in request
+    return self._process_response(response)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\api.py", line 337, in _process_response
+    raise exc
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\api.py", line 327, in _process_response
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\requests\models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: ('422 Client Error: Unprocessable Entity for url: https://api.airtable.com/v0/appLsHuXapDRwA4sn/users/recnYMaBPjWB9JQvE', '{\'type\': \'UNKNOWN_FIELD_NAME\', \'message\': \'Unknown field name: "stripeCustomerId"\'}')
+2025-12-04 19:07:12,095 ERROR Échec mise à jour Airtable après paiement. session_id=cs_test_a1KTgq6CMifTo1ARAAuPtlhpzp2ogaueKA6DF8UraSb8EV16BNWdixf5AM user_id=recnYMaBPjWB9JQvE plan=medium error=('422 Client Error: Unprocessable Entity for url: https://api.airtable.com/v0/appLsHuXapDRwA4sn/users/recnYMaBPjWB9JQvE', '{\'type\': \'UNKNOWN_FIELD_NAME\', \'message\': \'Unknown field name: "stripeCustomerId"\'}')
+Traceback (most recent call last):
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\app.py", line 755, in upgrade_success
+    table.update(user_id, updated_fields)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\table.py", line 450, in update
+    updated = self.api.request(
+        method=method,
+    ...<5 lines>...
+        },
+    )
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\api.py", line 295, in request
+    return self._process_response(response)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\api.py", line 337, in _process_response
+    raise exc
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\api.py", line 327, in _process_response
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\requests\models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: ('422 Client Error: Unprocessable Entity for url: https://api.airtable.com/v0/appLsHuXapDRwA4sn/users/recnYMaBPjWB9JQvE', '{\'type\': \'UNKNOWN_FIELD_NAME\', \'message\': \'Unknown field name: "stripeCustomerId"\'}')
+2025-12-04 22:47:04,009 ERROR Échec mise à jour Airtable après paiement. session_id=cs_test_a13hcIE7D8UJfkTa8TGUa0q1WEqsCMSd3xtwDKjeFO12qByumcamkkTwWp user_id=recnYMaBPjWB9JQvE plan=medium error=('422 Client Error: Unprocessable Entity for url: https://api.airtable.com/v0/appLsHuXapDRwA4sn/users/recnYMaBPjWB9JQvE', '{\'type\': \'INVALID_VALUE_FOR_COLUMN\', \'message\': \'Field "stripeCustomerId" cannot accept the provided value\'}')
+Traceback (most recent call last):
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\app.py", line 755, in upgrade_success
+    table.update(user_id, updated_fields)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\table.py", line 450, in update
+    updated = self.api.request(
+        method=method,
+    ...<5 lines>...
+        },
+    )
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\api.py", line 295, in request
+    return self._process_response(response)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\api.py", line 337, in _process_response
+    raise exc
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\pyairtable\api\api.py", line 327, in _process_response
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\dembe\formation\creationapp\youtranscriprank\venv\Lib\site-packages\requests\models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: ('422 Client Error: Unprocessable Entity for url: https://api.airtable.com/v0/appLsHuXapDRwA4sn/users/recnYMaBPjWB9JQvE', '{\'type\': \'INVALID_VALUE_FOR_COLUMN\', \'message\': \'Field "stripeCustomerId" cannot accept the provided value\'}')

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-container">
+    <div class="card auth-card">
+        <div class="card-left auth-left">
+            <h1 class="app-title">Créer un compte</h1>
+            <p class="app-subtitle">
+                Créez votre compte pour retrouver vos articles et profiter pleinement de AutoTube Writer.
+            </p>
+
+            <ul class="feature-list">
+                <li>📚 Historique de vos articles générés</li>
+                <li>🧠 Génération d’articles optimisés SEO</li>
+                <li>🎯 Outils de productivité autour de YouTube</li>
+            </ul>
+        </div>
+
+        <div class="card-right auth-right">
+            <h2 class="form-title">Inscription</h2>
+            <p class="form-subtitle">
+                Utilisez une adresse e-mail valide, vous en aurez besoin pour vous reconnecter.
+            </p>
+
+            {% if erreur %}
+              <div class="alert alert-error">
+                  {{ erreur }}
+              </div>
+            {% endif %}
+
+            <form method="POST" class="form">
+                <label for="email" class="form-label">Adresse e-mail</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="input-text"
+                    placeholder="vous@exemple.com"
+                    value="{{ email_value or '' }}"
+                    required
+                >
+
+                <label for="password" class="form-label" style="margin-top: 12px;">
+                    Mot de passe
+                </label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="input-text"
+                    placeholder="Au moins 6 caractères"
+                    required
+                >
+
+                <button type="submit" class="btn-primary" style="margin-top: 16px;">
+                    Créer mon compte
+                </button>
+            </form>
+
+            <p class="helper-text" style="margin-top: 12px;">
+                Vous avez déjà un compte ?
+                <a href="#" class="link-muted">Connexion</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

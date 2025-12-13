@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-container">
+    <div class="card auth-card">
+        <!-- COLONNE GAUCHE : résumé + changement de plan -->
+        <div class="card-left auth-left">
+            <h1 class="app-title">Mon compte</h1>
+            <p class="app-subtitle">
+                Consultez vos informations et gérez votre abonnement.
+            </p>
+
+            <!-- BADGE CRÉDITS -->
+            <div class="credits-badge" style="margin-top:12px; margin-bottom:18px;">
+                <span class="credits-label">Crédits restants</span>
+                <span class="credits-value">
+                    {% if credits_left is not none %}
+                        {{ credits_left }}
+                    {% elif current_user and current_user.credits is defined %}
+                        {{ current_user.credits }}
+                    {% else %}
+                        0
+                    {% endif %}
+                </span>
+            </div>
+
+            <!-- FORMULAIRE DE MISE À NIVEAU / CHOIX DE PLAN -->
+           <!-- <div class="plan-card">
+                <h3 style="margin-top:0;">Changer de formule</h3>
+                <p class="form-subtitle" style="margin-bottom:8px;">
+                    Sélectionnez une formule et cliquez sur « Mettre à jour ma formule ».
+                </p>
+
+               <form method="POST" class="form" id="form-plan">
+                    <label for="status" class="form-label">Formule</label>
+                    <select id="status" name="status" class="input-text" style="margin-bottom:12px;">
+                        <option value="free"   {% if status == "free" or status == "Free" %}selected{% endif %}>Free — 0€ — 5 crédits offerts</option>
+                        <option value="medium" {% if status == "medium" or status == "Medium" %}selected{% endif %}>Medium — 7,97€ — 30 crédits</option>
+                        <option value="premium" {% if status == "premium" or status == "Premium" %}selected{% endif %}>Premium — 17,97€ — 50 crédits</option>
+                    </select>
+
+                    <button type="submit" name="action" value="update_plan" class="btn-primary" style="width:100%;">
+                        Mettre à jour ma formule
+                    </button>
+                </form>
+
+                {% if erreur and request.form.get('action') == 'update_plan' %}
+                  <div class="alert alert-error" style="margin-top:10px;">
+                      {{ erreur }}
+                  </div>
+                {% endif %}
+
+                {% if success and request.form.get('action') == 'update_plan' %}
+                  <div class="alert alert-success" style="margin-top:10px;">
+                      {{ success }}
+                  </div>
+                {% endif %}
+            </div> -->
+
+            <!-- SYNTHÈSE DU PROFIL -->
+<div class="profile-summary" style="margin-top:18px;">
+    <p><strong>E-mail de connexion :</strong> {{ email }}</p>
+    {% if status %}
+      <p><strong>Plan actuel :</strong> {{ status }}</p>
+    {% endif %}
+    {% if creation_date %}
+      <p><strong>Créé le :</strong> {{ creation_date }}</p>
+    {% endif %}
+</div>
+
+{% if status != "gratuit" and status != "annulé" %}
+  <!-- Lien pour ouvrir la popup de désabonnement -->
+  <p style="margin-top:16px;">
+    <a href="#" class="unsubscribe-link" id="open-unsubscribe-modal">
+      Se désabonner
+    </a>
+  </p>
+{% endif %}
+
+<!-- POPUP de confirmation de désabonnement -->
+<div class="modal-overlay" id="unsubscribe-modal">
+  <div class="modal-card">
+    <h2>Se désabonner</h2>
+    <p class="modal-text">
+      Vous êtes actuellement sur le plan
+      <strong>{{ status }}</strong>
+      avec <strong>{{ credits_left }}</strong> crédits restants.
+    </p>
+    <p class="modal-text">
+      En vous désabonnant, vous perdrez les avantages du plan payant&nbsp;:
+    </p>
+    <ul class="modal-list">
+      <li>Plus de nouveaux crédits automatiques chaque mois.</li>
+      <li>Retour au plan gratuit avec un quota de crédits limité.</li>
+      <li>Accès restreint aux fonctionnalités premium.</li>
+    </ul>
+    <p class="modal-text">
+      Êtes-vous sûr de vouloir vous désabonner ? Votre plan restera actif
+      jusqu'à la fin de la période actuelle, puis passera en plan gratuit.
+    </p>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary" id="close-unsubscribe-modal">
+        Annuler
+      </button>
+      <form method="post" action="{{ url_for('cancel_subscription') }}" id="unsubscribe-form">
+        <button type="submit" class="btn-danger">
+          Oui, se désabonner
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP de succès après désabonnement -->
+{% if success %}
+<div class="modal-overlay" id="unsubscribe-success-modal">
+  <div class="modal-card">
+    <h2>Désabonnement pris en compte</h2>
+    <p class="modal-text">
+      Votre demande de désabonnement a bien été enregistrée.
+    </p>
+    <p class="modal-text">
+      Votre plan restera actif jusqu'à la fin de la période en cours, puis
+      passera automatiquement en plan gratuit.
+    </p>
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary" id="close-success-modal">
+        Fermer
+      </button>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+</div>
+
+
+        <!-- COLONNE DROITE : changement de mot de passe -->
+        <div class="card-right auth-right">
+            <h2 class="form-title">Modifier mon mot de passe</h2>
+            <p class="form-subtitle">
+                Pour changer votre mot de passe, veuillez saisir l’ancien et le nouveau.
+            </p>
+
+            {% if erreur and request.form.get('action') != 'update_plan' %}
+              <div class="alert alert-error">
+                  {{ erreur }}
+              </div>
+            {% endif %}
+
+            {% if success and request.form.get('action') != 'update_plan' %}
+              <div class="alert alert-success">
+                  {{ success }}
+              </div>
+            {% endif %}
+
+            <form method="POST" class="form" id="form-password">
+                <!-- on différencie les deux actions via un champ name="action" -->
+                <input type="hidden" name="action" value="update_password">
+
+                <label for="current_password" class="form-label">Ancien mot de passe</label>
+                <input
+                    type="password"
+                    id="current_password"
+                    name="current_password"
+                    class="input-text"
+                    required
+                >
+
+                <label for="new_password" class="form-label" style="margin-top: 12px;">
+                    Nouveau mot de passe
+                </label>
+                <input
+                    type="password"
+                    id="new_password"
+                    name="new_password"
+                    class="input-text"
+                    placeholder="Au moins 6 caractères"
+                    required
+                >
+
+                <label for="confirm_password" class="form-label" style="margin-top: 12px;">
+                    Confirmer le nouveau mot de passe
+                </label>
+                <input
+                    type="password"
+                    id="confirm_password"
+                    name="confirm_password"
+                    class="input-text"
+                    required
+                >
+
+                <button type="submit" class="btn-primary" style="margin-top: 16px; width:100%;">
+                    Mettre à jour mon mot de passe
+                </button>
+            </form>
+        </div>
+    
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var openBtn = document.getElementById("open-unsubscribe-modal");
+    var modal = document.getElementById("unsubscribe-modal");
+    var closeBtn = document.getElementById("close-unsubscribe-modal");
+    var successModal = document.getElementById("unsubscribe-success-modal");
+    var closeSuccessBtn = document.getElementById("close-success-modal");
+
+    if (openBtn && modal) {
+        openBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            modal.style.display = "flex";
+        });
+    }
+
+    if (closeBtn && modal) {
+        closeBtn.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+    }
+
+    // Afficher la popup de succès si présente
+    if (successModal) {
+        successModal.style.display = "flex";  // <-- ajouter cette ligne
+    }
+
+    // Fermer le succès
+    if (closeSuccessBtn && successModal) {
+        closeSuccessBtn.addEventListener("click", function () {
+            successModal.style.display = "none";
+        });
+    }
+
+    // Fermer la popup en cliquant sur l'overlay
+    [modal, successModal].forEach(function (m) {
+        if (!m) return;
+        m.addEventListener("click", function (e) {
+            if (e.target === m) {
+                m.style.display = "none";
+            }
+        });
+    });
+});
+</script>
+
+
+{% endblock %}
