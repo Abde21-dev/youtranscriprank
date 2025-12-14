@@ -15,11 +15,13 @@ import stripe
 import logging
 import random
 import traceback
+from openai import OpenAI
+import traceback
 
 from dotenv import load_dotenv
 import os
 load_dotenv()
-
+client = OpenAI()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
@@ -1262,6 +1264,20 @@ def login():
         erreur=erreur,
         email_value=email_value,
     )
+
+@app.route("/test-openai")
+def test_openai():
+    try:
+        resp = client.responses.create(
+            model="gpt-5.1",
+            input="ping",
+        )
+        print("TEST OPENAI OK")
+        return "TEST OPENAI OK", 200
+    except Exception as e:
+        print("TEST OPENAI FAILED:", repr(e))
+        traceback.print_exc()
+        return f"TEST OPENAI FAILED: {e}", 500    
 
 
 @app.route("/debug/users")

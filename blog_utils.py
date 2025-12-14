@@ -2,9 +2,11 @@
 from typing import Optional, Dict, Any
 from openai import OpenAI
 import json
+import os
 
 client = OpenAI()
 
+print("OPENAI_API_KEY present:", bool(os.getenv("OPENAI_API_KEY")))
 
 def generer_article_et_seo(
     source_text: str,
