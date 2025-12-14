@@ -8,6 +8,7 @@ from youtube_transcript_api import (
     VideoUnavailable,
 )
 from youtube_transcript_api._errors import RequestBlocked
+from youtube_transcript_api.proxies import GenericProxyConfig
 
 
 PROXY_URL = os.getenv("PROXY_URL")
@@ -42,6 +43,22 @@ def extraire_video_id(url: str) -> str:
     raise ValueError("URL YouTube non reconnue.")
 
 
+def _build_api_with_proxy() -> YouTubeTranscriptApi:
+    """
+    Construit une instance de YouTubeTranscriptApi avec proxy si PROXY_URL est défini.
+    """
+    if not PROXY_URL:
+        return YouTubeTranscriptApi()
+
+    # même URL pour http et https, Oxylabs accepte ça
+    proxy_config = GenericProxyConfig(
+        http_url=PROXY_URL,
+        https_url=PROXY_URL,
+    )
+
+    return YouTubeTranscriptApi(proxy_config=proxy_config)
+
+
 def recuperer_transcription(video_id: str, langues=None) -> str:
     """
     Récupère la transcription YouTube en utilisant éventuellement un proxy (Oxylabs).
@@ -49,30 +66,20 @@ def recuperer_transcription(video_id: str, langues=None) -> str:
     if langues is None:
         langues = ["fr", "en"]
 
-    # Prépare le dict de proxies si PROXY_URL est défini
-    proxies = None
-    if PROXY_URL:
-        proxies = {
-            "http": PROXY_URL,
-            "https": PROXY_URL,
-        }
+    ytt_api = _build_api_with_proxy()
 
     try:
-        ytt_api = YouTubeTranscriptApi()
         fetched = ytt_api.fetch(
             video_id,
             languages=langues,
-            proxies=proxies,
         )
     except RequestBlocked as e:
+        # blocage IP (même via proxy)
         raise RuntimeError(
             "YouTube bloque les requêtes du serveur (même via proxy). "
             "Réessaie plus tard ou avec une autre vidéo."
         ) from e
 
-
-    # On obtient une liste de dicts équivalente à l'ancien get_transcript
     segments = fetched.to_raw_data()
     lignes = [s["text"] for s in segments if s.get("text")]
     return "\n".join(lignes)
-
