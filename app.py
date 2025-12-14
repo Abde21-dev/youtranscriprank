@@ -581,10 +581,10 @@ def blogify():
         meta_description = data.get("meta_description")
         image_prompt = data.get("image_prompt", "")
     except Exception as e:
+        print("ERREUR GENERATION ARTICLE:", repr(e))
+        traceback.print_exc()
         erreur = f"Erreur lors de la génération de l'article : {e}"
         return render_template("transcription.html", active_page="transcription", transcript=transcript, erreur=erreur)
-        print("ERREUR GENERATION ARTICLE:", repr(e))
-        traceback.print_exc(
     
     try:
         rec = table.get(user_id)
