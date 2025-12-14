@@ -9,12 +9,12 @@ from youtube_transcript_api import TranscriptsDisabled, NoTranscriptFound, Video
 from config_airtable import get_users_table
 from airtable_articles import save_article_to_airtable, get_articles_table as get_articles_table_helper
 
-
 import time
 import threading
 import stripe
 import logging
 import random
+import traceback
 
 from dotenv import load_dotenv
 import os
@@ -583,6 +583,8 @@ def blogify():
     except Exception as e:
         erreur = f"Erreur lors de la génération de l'article : {e}"
         return render_template("transcription.html", active_page="transcription", transcript=transcript, erreur=erreur)
+        print("ERREUR GENERATION ARTICLE:", repr(e))
+        traceback.print_exc(
     
     try:
         rec = table.get(user_id)
