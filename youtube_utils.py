@@ -7,7 +7,7 @@ from youtube_transcript_api import (
     NoTranscriptFound,
     VideoUnavailable,
 )
-from youtube_transcript_api._errors import RequestFailed
+from youtube_transcript_api._errors import RequestBlocked
 
 
 PROXY_URL = os.getenv("PROXY_URL")
@@ -58,22 +58,18 @@ def recuperer_transcription(video_id: str, langues=None) -> str:
         }
 
     try:
-        # Création de l'instance de l’API
         ytt_api = YouTubeTranscriptApi()
-
-        # Récupération de la transcription (FetchedTranscript)
         fetched = ytt_api.fetch(
             video_id,
             languages=langues,
             proxies=proxies,
         )
-
-    except RequestFailed as e:
-        # Cas typique: YouTube bloque encore (même via proxy)
+    except RequestBlocked as e:
         raise RuntimeError(
             "YouTube bloque les requêtes du serveur (même via proxy). "
             "Réessaie plus tard ou avec une autre vidéo."
         ) from e
+
 
     # On obtient une liste de dicts équivalente à l'ancien get_transcript
     segments = fetched.to_raw_data()
