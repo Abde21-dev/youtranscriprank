@@ -15,7 +15,7 @@ def generer_article_et_seo(
     langue: str = "français",
 ) -> Dict[str, Any]:
     # 1) Limiter la taille du texte source
-    source_text = source_text[:8000]  # par exemple limiter à 8 000 caractères
+    source_text = source_text[:5000]  # par exemple limiter à 8 000 caractères
 
     instructions = f"""
 Tu es un rédacteur web expert SEO et un content strategist.
