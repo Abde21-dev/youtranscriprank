@@ -1,21 +1,21 @@
-# blog_utils.py
 from typing import Optional, Dict, Any
 from openai import OpenAI
 import json
 import os
 
 client = OpenAI()
-
 print("OPENAI_API_KEY present:", bool(os.getenv("OPENAI_API_KEY")))
 
+
 def generer_article_et_seo(
-    #source_text: str,
-    source_text = source_text[:8000],  # par exemple limiter à 8 000 caractères
+    source_text: str,
     titre_souhaite: Optional[str] = None,
     ton: str = "pédagogique et accessible",
     public_cible: str = "débutants intéressés par le sujet",
     langue: str = "français",
 ) -> Dict[str, Any]:
+    # 1) Limiter la taille du texte source
+    source_text = source_text[:8000]  # par exemple limiter à 8 000 caractères
 
     instructions = f"""
 Tu es un rédacteur web expert SEO et un content strategist.
@@ -61,6 +61,9 @@ Retourne UNIQUEMENT un objet JSON valide, sans texte autour, de la forme :
 
     prompt_complet = f"{instructions}\n\nTexte source à transformer :\n\n{source_text}"
 
+    print("LONGUEUR source_text:", len(source_text))
+    print("LONGUEUR prompt_complet:", len(prompt_complet))
+
     response = client.responses.create(
         model="gpt-5.1",
         input=prompt_complet,
@@ -71,17 +74,14 @@ Retourne UNIQUEMENT un objet JSON valide, sans texte autour, de la forme :
     try:
         data = json.loads(raw)
     except json.JSONDecodeError as e:
-        raise RuntimeError(f"Impossible de parser la réponse JSON du modèle : {e}\nRéponse brute : {raw}") from e
+        raise RuntimeError(
+            f"Impossible de parser la réponse JSON du modèle : {e}\nRéponse brute : {raw}"
+        ) from e
 
-    # Quelques sécurités basiques
     for key in ["html", "keyword", "seo_title", "meta_description", "image_prompt"]:
         data.setdefault(key, "")
 
-    # On tronque la meta description si jamais le modèle dépasse un peu
     data["meta_description"] = data["meta_description"][:160]
-    print("LONGUEUR source_text:", len(source_text))
-    print("LONGUEUR prompt_complet:", len(prompt_complet))
-
 
     return data
 
