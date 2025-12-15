@@ -9,7 +9,8 @@ client = OpenAI()
 print("OPENAI_API_KEY present:", bool(os.getenv("OPENAI_API_KEY")))
 
 def generer_article_et_seo(
-    source_text: str,
+    #source_text: str,
+    source_text = source_text[:8000],  # par exemple limiter à 8 000 caractères
     titre_souhaite: Optional[str] = None,
     ton: str = "pédagogique et accessible",
     public_cible: str = "débutants intéressés par le sujet",
@@ -78,6 +79,9 @@ Retourne UNIQUEMENT un objet JSON valide, sans texte autour, de la forme :
 
     # On tronque la meta description si jamais le modèle dépasse un peu
     data["meta_description"] = data["meta_description"][:160]
+    print("LONGUEUR source_text:", len(source_text))
+    print("LONGUEUR prompt_complet:", len(prompt_complet))
+
 
     return data
 
